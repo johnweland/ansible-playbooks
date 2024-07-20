@@ -1,0 +1,4 @@
+---
+  - name: Leave Docker Swarm
+    ansible.builtin.shell: |
+      docker swarm leave --force

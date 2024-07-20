@@ -1,0 +1,19 @@
+---
+leader:
+  hosts:
+    docker-manager-01:
+      size: 'xs'
+
+managers:
+  hosts:
+    docker-manager-[02:03]:
+      size: 'xs'
+
+workers:
+  hosts:
+    docker-worker-[04:06]:
+      size: 'sm'
+    docker-worker-[07:09]:
+      size: 'md'
+    docker-worker-[10:12]:
+      size: 'lg'

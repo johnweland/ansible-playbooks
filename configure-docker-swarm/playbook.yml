@@ -1,0 +1,9 @@
+---
+- name: Setup Docker Swarm
+  hosts: all
+  become: true
+  roles:
+    - install-prerequisites
+    - setup-docker-swarm
+    # - configure-glusterfs
+    # - leave-swarm

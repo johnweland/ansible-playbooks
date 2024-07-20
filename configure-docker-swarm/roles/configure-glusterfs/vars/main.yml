@@ -1,0 +1,20 @@
+---
+leader:
+  - docker-manager-01
+managers:
+  - docker-manager-02
+  - docker-manager-03
+workers:
+  - docker-worker-04
+  - docker-worker-05
+  - docker-worker-06
+  - docker-worker-07
+  - docker-worker-08
+  - docker-worker-09
+  - docker-worker-10
+  - docker-worker-11
+  - docker-worker-12
+all_nodes:
+  - "{{ leader }}"
+  - "{{ managers }}"
+  - "{{ workers }}"
