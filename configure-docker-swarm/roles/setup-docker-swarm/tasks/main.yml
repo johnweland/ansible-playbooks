@@ -1,50 +1,44 @@
 ---
-- name: Initialize Docker Swarm on Admin Node
+- name: Initialize Docker Swarm on Admin Node  # noqa: no-changed-when
   ansible.builtin.shell: |
     docker swarm init --advertise-addr {{ leader.address }}
   delegate_to: "{{ leader.hostname }}"
   run_once: true
-  changed_when: false
 
-- name: Get manager join token
+- name: Get manager join token  # noqa: no-changed-when
   ansible.builtin.shell: |
     docker swarm join-token manager -q
   register: manager_token
   delegate_to: "{{ leader.hostname }}"
   run_once: true
-  changed_when: false
 
-- name: Get worker join token
+- name: Get worker join token  # noqa: no-changed-when
   ansible.builtin.shell: |
     docker swarm join-token worker -q
   register: worker_token
   delegate_to: "{{ leader.hostname }}"
   run_once: true
-  changed_when: false
 
-- name: Join manager nodes to Swarm
+- name: Join manager nodes to Swarm  # noqa: no-changed-when
   ansible.builtin.shell: |
     docker swarm join --token {{ manager_token.stdout }} {{ leader.address }}
   with_items: "{{ managers }}"
   delegate_to: "{{ item }}"
   run_once: true
-  changed_when: false
 
-- name: Join worker nodes to Swarm
+- name: Join worker nodes to Swarm  # noqa: no-changed-when
   ansible.builtin.shell: |
     docker swarm join --token {{ worker_token.stdout }} {{ leader.address }}
   with_items: "{{ workers }}"
   delegate_to: "{{ item }}"
   run_once: true
-  changed_when: false
 
-- name: Set Docker Label 'worker' on Worker Nodes
+- name: Set Docker Label 'worker' on Worker Nodes  # noqa: no-changed-when
   ansible.builtin.shell: |
     docker node update --label-add worker=true {{ item }}
   with_items: "{{ workers }}"
   delegate_to: "{{ leader.hostname }}"
   run_once: true
-  changed_when: false
 
 # - name: Set Docker Label 'size' on All Nodes
 #   ansible.builtin.shell: |

@@ -1,4 +1,4 @@
---- 
+---
 - name: Start & Enable GlusterFS
   ansible.builtin.systemd:
     name: glusterd
@@ -11,18 +11,18 @@
     state: directory
     mode: '0755'
 
-- name: Install GlusterFS and create volume
+- name: Install GlusterFS and create volume  # noqa: no-changed-when
   ansible.builtin.shell: |
-    gluster peer probe {{ leader }}                # loop over all nodes here
-    gluster volume create staging-gfs replica 5 \  # all_nodes count
-    {{ leader }}:/gluster/volume1 \                # loop over all nodes here
+    gluster peer probe {{ leader }}
+    gluster volume create staging-gfs replica {{ all_nodes | flatten | length }} \
+    {{ leader }}:/gluster/volume1 \
     force
     gluster volume start staging-gfs
     chmod 666 /var/run/docker.sock
   delegate_to: "{{ leader }}"
   run_once: true
 
-- name: Ensure GlusterFS mounts on reboot
+- name: Ensure GlusterFS mounts on reboot  # noqa: no-changed-when
   ansible.builtin.shell: |
     echo 'localhost:/staging-gfs /mnt glusterfs defaults,_netdev,backupvolfile-server=localhost 0 0' >> /etc/fstab
     mount.glusterfs localhost:/staging-gfs /mnt

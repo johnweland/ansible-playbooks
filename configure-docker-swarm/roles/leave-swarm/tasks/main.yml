@@ -1,4 +1,4 @@
 ---
-  - name: Leave Docker Swarm
-    ansible.builtin.shell: |
-      docker swarm leave --force
+- name: Leave Docker Swarm  # noqa: no-changed-when
+  ansible.builtin.shell: |
+    docker swarm leave --force
