@@ -4,6 +4,6 @@
   become: true
   roles:
     # - install-prerequisites
-    # - setup-docker-swarm
+    - setup-docker-swarm
     # - configure-glusterfs
     # - leave-swarm
