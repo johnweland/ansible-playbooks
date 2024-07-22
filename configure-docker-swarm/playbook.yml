@@ -5,10 +5,10 @@
 #   roles:
 #     - configure-prerequisites
 
-- name: Initalize Docker Swarm
+- name: Initialize Docker Swarm
   hosts: leader
   tasks:
-    - name: Initalize Docker Swarm on Primary manager
+    - name: Initialize Docker Swarm on Primary manager
       community.docker.docker_swarm:
         state: present
       register: swarm_result
