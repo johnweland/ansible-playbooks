@@ -1,14 +1,10 @@
 ---
-- name: Install QEMU Guest Agent
-  ansible.builtin.apt:
-    name: qemu-guest-agent
-    state: present
-
-- name: Ensure apt is using HTTPS
+- name: Ensure Dependent Packages are Installed
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   loop:
+    - qemu-guest-agent
     - apt-transport-https
     - ca-certificates
     - curl
@@ -45,7 +41,7 @@
     enabled: true
     state: started
 
-- name: Install GlusterFS
+- name: Remove Unused and Unneeded Packages
   ansible.builtin.apt:
-    name: glusterfs-server
-    state: present
+    autoremove: true
+    autoclean: true

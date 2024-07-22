@@ -1,9 +1,59 @@
 ---
-- name: Setup Docker Swarm
+# - name: Setup Docker Swarm
+#   hosts: all
+#   become: true
+#   roles:
+#     - configure-prerequisites
+
+- name: Initalize Docker Swarm
+  hosts: leader
+  become: true
+  tasks:
+    - name: Initalize Docker Swarm on Primary manager
+      community.docker.docker_swarm:
+        state: present
+      register: swarm_result
+
+    - name: Save Join Tokens
+      ansible.builtin.set_fact:
+        manger_token: "{{ swarm_result.swarm_facts_JoinTokens.Manager }}"
+        worker_token: "{{ swarm_result.swarm_facts_JoinTokens.Worker }}"
+        cacheable: true
+
+- name: Add Managers to Docker Swarm
+  hosts: managers
+  become: true
+  tasks:
+    - name: Join to Swarm
+      community.docker.docker_swarm:
+        state: join
+        remote_addrs:
+          - "{{ hostvars[groups['leader'][0]]['ansible_eth0']['ipv4']['address'] }}"
+        join_token: "{{ hostvars[groups['leader'][0]]['manager_token'] }}"
+
+- name: Add Workers to Docker Swarm
+  hosts: workers
+  become: true
+  tasks:
+    - name: Join to Swarm
+      community.docker.docker_swarm:
+        state: join
+        remote_addrs:
+          - "{{ hostvars[groups['leader'][0]]['ansible_eth0']['ipv4']['address'] }}"
+        join_token: "{{ hostvars[groups['leader'][0]]['worker_token'] }}"
+
+- name: Post Setup
   hosts: all
   become: true
-  roles:
-    # - install-prerequisites
-    - setup-docker-swarm
-    # - configure-glusterfs
-    # - leave-swarm
+  tasks:
+    - name: Label Docker Swarm Nodes
+      community.docker.docker_node:
+        hostname: "{{ hostvars[item].ansible_hostname }}"
+        labels:
+          size: "{{ hostvars[item].size }}"
+
+# - name: Leave Docker Swarm
+#   hosts: all
+#   become: true
+#   roles:
+#     - leave-swarm
