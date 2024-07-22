@@ -7,7 +7,6 @@
 
 - name: Initalize Docker Swarm
   hosts: leader
-  become: true
   tasks:
     - name: Initalize Docker Swarm on Primary manager
       community.docker.docker_swarm:
@@ -22,7 +21,6 @@
 
 - name: Add Managers to Docker Swarm
   hosts: managers
-  become: true
   tasks:
     - name: Join to Swarm
       community.docker.docker_swarm:
@@ -33,7 +31,6 @@
 
 - name: Add Workers to Docker Swarm
   hosts: workers
-  become: true
   tasks:
     - name: Join to Swarm
       community.docker.docker_swarm:
@@ -44,7 +41,6 @@
 
 - name: Post Setup
   hosts: all
-  become: true
   tasks:
     - name: Label Docker Swarm Nodes
       community.docker.docker_node:

@@ -20,11 +20,17 @@
     repo: "{{ docker_apt_repository }}"
     state: present
 
-- name: Install Docker CE
+- name: Install Docker
   ansible.builtin.apt:
-    name: docker-ce
+    name: "{{ item }}"
     state: present
     update_cache: true
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
 
 - name: Configure Docker daemon options
   ansible.builtin.template:
