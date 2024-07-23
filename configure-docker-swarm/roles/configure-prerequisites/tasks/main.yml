@@ -5,6 +5,8 @@
     state: present
   loop:
     - qemu-guest-agent
+    - python3-requests
+    - python3-docker
     - apt-transport-https
     - ca-certificates
     - curl
@@ -45,7 +47,7 @@
   ansible.builtin.systemd:
     name: docker
     enabled: true
-    state: started
+    state: stopped
 
 - name: Remove Unused and Unneeded Packages
   ansible.builtin.apt:
